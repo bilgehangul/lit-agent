@@ -38,16 +38,16 @@ with evidence, not assumption.
 
 ## M1 — Skeleton + setup
 
-- [ ] `capabilities.json` state machine: `status` (`enabled`|`disabled`|`broken`),
+- [x] `capabilities.json` state machine: `status` (`enabled`|`disabled`|`broken`),
       `last_verified`, `config`, `last_error`. Helper at `scripts/lib/capabilities.py`.
-- [ ] `scripts/doctor.py` — one probe per capability in spec §5 table.
-- [ ] Runtime gating helper every skill calls first (spec §5 "Runtime gating").
+- [x] `scripts/doctor.py` — one probe per capability in spec §5 table.
+- [x] Runtime gating helper every skill calls first (spec §5 "Runtime gating").
       Three consecutive failures during a run means mark `broken`, finish without it, report demotion.
-- [ ] `/lit-setup` phases A–E (spec §5).
-- [ ] `/lit-doctor` — re-probe, status table, offer repair or disable.
-- [ ] `/lit-scope` — re-runnable scope interview (spec §7), writes `.lit/config.yaml` + `scope.md`,
+- [x] `/lit-setup` phases A–E (spec §5).
+- [x] `/lit-doctor` — re-probe, status table, offer repair or disable.
+- [x] `/lit-scope` — re-runnable scope interview (spec §7), writes `.lit/config.yaml` + `scope.md`,
       stamps a scope version.
-- [ ] `references/output-schemas.md` — per-paper note schema, `figures.json`, `state.json`.
+- [x] `references/output-schemas.md` — per-paper note schema, `figures.json`, `state.json`.
 
 *Acceptance:* a fresh user on macOS, Linux, and Windows can run setup, decline every optional
 capability, and land in a valid enabled state.

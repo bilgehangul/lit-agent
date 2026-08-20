@@ -1,0 +1,75 @@
+# Development fixture scope — NOT a real interview.
+#
+# The real scope comes from `/lit-scope`, which is a conversation. This file exists so that
+# M3/M5 development has a realistic scope block to condition prompts on without inventing a
+# research question for the user.
+#
+# It is derived from the densest cluster in the development library (see
+# docs/spikes/FINDINGS.md): roughly a dozen papers on LLM-based privacy policy analysis —
+# Polisis, PolicyLint, CLEAR, GoldCoin, Zimmeck et al., Del Alamo et al., Amos et al.,
+# Hosseini et al., Xie et al., Goknil et al., Chen et al.
+#
+# `is_fixture: true` marks every note generated under it, so fixture output can never be
+# mistaken for output produced from the user's actual research question.
+
+scope:
+  field: Computer Science
+  subfield: privacy and security, natural language processing
+  venue_vocabulary: >-
+    USENIX Security, IEEE S&P, PETS, CCS, ACL. Use "contextual integrity", "data practice",
+    and "disclosure" rather than looser policy-studies vocabulary.
+
+  research_question: >-
+    How reliably can large language models extract and reason about data practices in
+    privacy policies, and where do they fail compared to earlier supervised and
+    rule-based approaches?
+
+  purpose: related_work
+  stage: starting_cold
+
+  what_matters:
+    - methods
+    - empirical_results
+    - datasets
+    - limitations
+    - reproducibility
+
+  artifacts:
+    - per_paper_notes
+    - methods_matrix
+    - thematic_synthesis
+    - gap_analysis
+    - review_draft
+    - bibtex_subset
+
+  exclusions:
+    before_year: 2016
+    paper_types: [position]
+    note: >-
+      Pre-2016 work predates both the transformer era and the GDPR drafting that reframed
+      the problem, so it is background rather than related work.
+
+  vocabulary:
+    key_terms:
+      - privacy policy analysis
+      - data practice extraction
+      - contextual integrity
+      - policy contradiction
+      - GDPR compliance
+      - annotation scheme
+    synonyms:
+      data practice: [data collection statement, information type disclosure]
+      contradiction: [inconsistency, conflicting statement]
+      policy: [privacy notice, terms of service]
+    author_groups:
+      - Sadeh / Usable Privacy Policy Project (CMU)
+      - Zimmeck and Bellovin
+      - Harkous et al. (Polisis)
+
+  voice:
+    tone: >-
+      Terse and technical. Prefer concrete numbers over adjectives. Name the method and the
+      dataset in the same sentence as the claim.
+    match_manuscript: null
+
+  is_fixture: true
