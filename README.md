@@ -6,8 +6,11 @@ literature knowledge base.
 Point it at your Zotero library (or a folder of PDFs) and go from "200 unread PDFs" to a
 drafted related-work section with correct citations, without leaving your terminal.
 
-> **Status: in development.** See `ROADMAP.md` for what works today and `STATE.md` for
-> where the build currently stands. Full spec: `lit-agent-project-plan.md`.
+> **Status: M0–M5 complete and working end to end.** Ingest, per-paper analysis with
+> verified citations, question answering, and cross-paper synthesis all run against a real
+> Zotero library. Figures (M6), Zotero write-back (M7), enrichment (M8), and vector search
+> (M9) are queued. See `ROADMAP.md` for the plan and `STATE.md` for exactly where the build
+> stands, including its known gaps. Full spec: `lit-agent-project-plan.md`.
 
 ## What it does
 
@@ -27,6 +30,32 @@ drafted related-work section with correct citations, without leaving your termin
 Every claim in generated output traces to a specific paper and a locator (page or section).
 When support cannot be located, the output says `[UNVERIFIED]` rather than inventing a
 citation. See P7 in `CLAUDE.md`.
+
+## How it works today
+
+```
+/lit-setup      build the environment, connect your library, verify each capability
+/lit-scope      the research-scope interview that shapes every output
+/lit-ingest     pull the library in and extract text with page markers
+/lit-analyze    write a structured note per paper, then verify every locator
+/lit-ask        ask questions, get answers with citations
+/lit-review     themes, methods matrix, gaps, contradictions, drafted related work
+/lit-doctor     re-probe everything and repair or disable what is broken
+```
+
+Example output from a real six-paper run is in [`docs/examples/`](docs/examples/), and
+worked question answering — including a question the corpus cannot answer, and the system
+declining it — is in [`docs/m4-qa-examples.md`](docs/m4-qa-examples.md).
+
+## Verification, not vibes
+
+Two things are checked mechanically rather than trusted:
+
+- **Every locator resolves.** A citation naming a page that does not exist in the extracted
+  text is a fabrication, and the note is rejected. The M3 gate report is at
+  [`docs/spikes/m3-locator-check.md`](docs/spikes/m3-locator-check.md).
+- **Every contradiction has two verified locators**, one per side, each resolved against the
+  cited paper's own text. An entry that cannot meet that bar does not ship.
 
 ## Install
 
