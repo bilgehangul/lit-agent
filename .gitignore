@@ -30,3 +30,7 @@ Thumbs.db
 # Scratch
 scratch/
 tmp/
+
+# The browsable export is user data (PDFs + notes). Never commit it.
+literature-review/
+lit-review/
