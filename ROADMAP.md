@@ -56,22 +56,22 @@ capability, and land in a valid enabled state.
 
 ## M2 — Ingest + text
 
-- [ ] `LibraryItem` common interface (spec §8).
-- [ ] Adapter 8a — Zotero local HTTP API (read-only; BBT citekeys if present).
-- [ ] Adapter 8b — `zotero.sqlite` direct read (copy-to-temp, read-only, never write).
-- [ ] Adapter 8c — export directory (CSV / BibTeX / CSL-JSON / RDF + `files/`).
-- [ ] Adapter 8d — generic PDF folder (DOI/arXiv extraction then Crossref/arXiv/OpenAlex,
+- [x] `LibraryItem` common interface (spec §8).
+- [x] Adapter 8a — Zotero local HTTP API (read-only; BBT citekeys if present).
+- [x] Adapter 8b — `zotero.sqlite` direct read (copy-to-temp, read-only, never write).
+- [x] Adapter 8c — export directory (CSV / BibTeX / CSL-JSON / RDF + `files/`).
+- [x] Adapter 8d — generic PDF folder (DOI/arXiv extraction then Crossref/arXiv/OpenAlex,
       ask before network calls).
-- [ ] Citekey resolution: prefer Better BibTeX, else `authorYEARfirstword`, record the mapping.
-- [ ] Dedupe: DOI, then arXiv ID, then normalized title+year.
-- [ ] Per-item checkpointing in `.lit/state.json`; `--force` to redo.
-- [ ] Stage 2 text extraction with raw `pymupdf` `page.get_text()`, **preserving page markers**
+- [x] Citekey resolution: prefer Better BibTeX, else `authorYEARfirstword`, record the mapping.
+- [x] Dedupe: DOI, then arXiv ID, then normalized title+year.
+- [x] Per-item checkpointing in `.lit/state.json`; `--force` to redo.
+- [x] Stage 2 text extraction with raw `pymupdf` `page.get_text()`, **preserving page markers**
       (locators depend on them — do not strip). Heading detection from font size via
       `get_text("dict")` for section locators. `pymupdf4llm` behind an opt-in `--layout` flag.
       Amended by ADR-0001 (it is 85x slower for 3% more text).
-- [ ] Scanned-PDF detection (near-zero text layer) then OCR via `ocrmypdf` if available, else flag
+- [x] Scanned-PDF detection (near-zero text layer) then OCR via `ocrmypdf` if available, else flag
       unprocessable.
-- [ ] Per-item error report; one bad item never fails the run.
+- [x] Per-item error report; one bad item never fails the run.
 
 *Acceptance:* a 50-item library ingests fully; killing the process mid-run and re-running resumes
 correctly and produces identical output.
