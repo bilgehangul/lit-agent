@@ -1,0 +1,61 @@
+# M4 acceptance: 15 questions over the gold set.
+#
+# `expect` lists the citekey(s) that must appear in the top-3 retrieved notes. These are the
+# papers that actually answer the question -- established by having read all six.
+#
+# `unanswerable: true` marks questions the corpus genuinely cannot answer. Retrieval must
+# return nothing useful for these, and /lit-ask must say so rather than answering from model
+# priors. A retrieval system that never admits ignorance is worse than useless for a
+# literature review, so these are as much a part of the acceptance criterion as the rest.
+
+questions:
+  - q: "Does prompt engineering outperform supervised baselines for privacy policy analysis?"
+    expect: [chen2025llms, goknil2024privacy]
+
+  - q: "What is the reported precision of PolicyLint for contradiction detection?"
+    expect: [andownodatepolicylint]
+
+  - q: "How many privacy policies are in the OPP-115 corpus and how were they annotated?"
+    expect: [wilson2016creation]
+
+  - q: "Does chain-of-thought prompting help with privacy policy annotation?"
+    expect: [goknil2024privacy, chen2025llms]
+
+  - q: "What accuracy did automated privacy icon assignment achieve?"
+    expect: [harkousnodatepolisis]
+
+  - q: "Which data practice categories are hardest for automated classifiers?"
+    expect: [chen2025llms, goknil2024privacy]
+
+  - q: "Does model size matter after fine-tuning on privacy policy corpora?"
+    expect: [chen2025llms]
+
+  - q: "How were the OPP-115 policies sampled, and what jurisdictions do they cover?"
+    expect: [wilson2016creation]
+
+  - q: "What did the systematic mapping study conclude about contextualization?"
+    expect: [delalamo2022systematic]
+
+  - q: "Is Polisis robust to adversarially constructed privacy policies?"
+    expect: [harkousnodatepolisis]
+
+  - q: "How does reprompting affect false positives in contradiction analysis?"
+    expect: [goknil2024privacy]
+
+  - q: "What is inter-annotator agreement like on privacy policy annotation?"
+    expect: [wilson2016creation]
+
+  - q: "Do LLMs produce usable explanations of their privacy policy classifications?"
+    expect: [chen2025llms]
+
+  - q: "What fraction of Google Play privacy policies contain internal contradictions?"
+    expect: [andownodatepolicylint]
+
+  - q: "Why do reported F1 scores differ so much across LLM privacy policy papers?"
+    expect: [goknil2024privacy]
+
+# Questions the gold set cannot answer. /lit-ask must decline rather than improvise.
+unanswerable:
+  - q: "What is the throughput of PolicyLint in policies per second on GPU hardware?"
+  - q: "How do privacy policies written in Portuguese differ from English ones?"
+  - q: "What is the market share of the apps whose policies were analyzed?"

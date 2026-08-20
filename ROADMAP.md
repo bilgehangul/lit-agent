@@ -102,9 +102,9 @@ per-row pass/fail. Below 90% means stop, report, do not start M4.
 
 ## M4 — Q&A
 
-- [ ] Grep/glob retrieval: frontmatter-field filter, keyword search, read full notes for hits.
-- [ ] `/lit-ask` answers with citations back to citekey + locator.
-- [ ] Refuse to answer from model priors when the corpus lacks support; offer to record the
+- [x] Grep/glob retrieval: frontmatter-field filter, keyword search, read full notes for hits.
+- [x] `/lit-ask` answers with citations back to citekey + locator.
+- [x] Refuse to answer from model priors when the corpus lacks support; offer to record the
       question as a gap.
 
 *Acceptance:* 15 test questions answered with correct citations over the gold set.
