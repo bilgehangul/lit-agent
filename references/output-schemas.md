@@ -276,3 +276,38 @@ value is read as `disabled`. `broken` is only ever a demotion from `enabled`, ne
 initial state.
 
 Written atomically: a half-written capability file is precisely the state P1 forbids.
+
+---
+
+## `literature-review/` — the browsable export
+
+A projection of `.lit/` organized for a person rather than for the pipeline (see
+`/lit-export`). Mirrors the Zotero collection structure, with each paper's PDF and its
+summary in the same folder.
+
+```
+literature-review/
+├── README.md                     navigable index, grouped by collection
+├── <Collection>/
+│   ├── <citekey>/
+│   │   ├── <citekey>.pdf
+│   │   ├── SUMMARY.md            copy of papers/<citekey>.md
+│   │   ├── fulltext.md           copy of text/<citekey>.md
+│   │   ├── metadata.json         copy of raw/<citekey>.json
+│   │   └── figures/
+│   └── <citekey>.md              pointer, when the paper lives in another collection
+├── _synthesis/                   synthesis artifacts + refs.bib + scope.md
+└── _unfiled/                     papers in no collection
+```
+
+Rules:
+
+- **Never read back from.** It is rebuildable and disposable (**P5**). Edits here are lost
+  on the next export.
+- A paper in several collections is stored **once**, under the alphabetically first, with a
+  pointer file in the others. No duplicated PDFs.
+- A paper with no note gets a `SUMMARY.md` placeholder stating *why* — not analyzed yet,
+  extraction skipped, extraction failed (**P4**). An empty folder looks finished; a
+  placeholder does not.
+- Collection names are sanitized for Windows, macOS, and Linux alike, and links in
+  `README.md` are percent-encoded so names with spaces stay clickable.

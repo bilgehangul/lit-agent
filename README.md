@@ -40,6 +40,7 @@ citation. See P7 in `CLAUDE.md`.
 /lit-analyze    write a structured note per paper, then verify every locator
 /lit-ask        ask questions, get answers with citations
 /lit-review     themes, methods matrix, gaps, contradictions, drafted related work
+/lit-export     a browsable folder mirroring your Zotero collections, PDFs beside summaries
 /lit-doctor     re-probe everything and repair or disable what is broken
 ```
 
