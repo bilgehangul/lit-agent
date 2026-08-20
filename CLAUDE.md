@@ -58,7 +58,12 @@ rather than inventing. This is the single most important correctness rule in the
 - **Python:** one `requirements.txt`, installed into a plugin-managed venv at `~/.lit-agent/venv`.
   Core deps must be pure-pip and cross-platform. Anything needing a JVM, system package, or GPU is
   an *optional extra* behind a capability flag.
-  Interpreter policy: see `docs/spikes/FINDINGS.md` (S0). Resolved default is recorded there.
+  Interpreter policy: **Python 3.14.2** (the default `python`) resolves every core dependency
+  on this machine — verified in M0/S0. No 3.13 fallback needed.
+- **Text extraction:** raw `pymupdf` `page.get_text()` with explicit page markers is the
+  default. `pymupdf4llm` is opt-in behind `--layout` — it is 85x slower for 3% more text.
+  See `docs/decisions/0001-fast-text-extraction-by-default.md`. **Never strip page markers**;
+  P7 locator verification depends on them.
 - **Capability gating:** every skill begins by reading `~/.lit-agent/capabilities.json` via
   `scripts/lib/capabilities.py`. If a required capability is not `enabled`, print what's missing
   and the one command that fixes it, then exit. Do not attempt the work.

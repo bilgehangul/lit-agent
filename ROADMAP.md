@@ -13,23 +13,23 @@ Legend: `[ ]` todo · `[x]` done · **HARD GATE** = do not proceed past this on 
 Time-boxed. Resolve unknowns before committing to architecture. Output: `docs/spikes/FINDINGS.md`,
 which may amend the spec. Each amendment gets an ADR in `docs/decisions/`.
 
-- [ ] S0 — Dependency reality on Windows. Resolve `pymupdf`, `pymupdf4llm`, `httpx`, `pyyaml`,
+- [x] S0 — Dependency reality on Windows. Resolve `pymupdf`, `pymupdf4llm`, `httpx`, `pyyaml`,
       `bibtexparser`, `sqlite-vec` on Python 3.14 first; fall back to 3.13 on any wheel miss.
       **Decides the interpreter recorded in CLAUDE.md.**
-- [ ] S1 — Zotero local HTTP API. Confirm whether the 403 on `127.0.0.1:23119` is the
+- [x] S1 — Zotero local HTTP API. Confirm whether the 403 on `127.0.0.1:23119` is the
       disabled-API case. Document the exact toggle in `CONNECTORS.md`. Check Better BibTeX
       JSON-RPC at `/better-bibtex/json-rpc`. *Non-blocking* — S2 covers dev needs.
-- [ ] S2 — SQLite schema. Copy-to-temp, read-only. Validate queries for items, attachments
+- [x] S2 — SQLite schema. Copy-to-temp, read-only. Validate queries for items, attachments
       (stored + linked), `itemAnnotations`, tags, collections against the live DB. Record schema
       version. Query set lands in `references/zotero-internals.md`.
-- [ ] S3 — Figure extraction reality check. All three tiers on 20 real papers. **Measure the
+- [x] S3 — Figure extraction reality check. All three tiers on 20 real papers. **Measure the
       Tier-2 vector-figure miss rate** — decides whether Tier 3 or `pdffigures2` is worth M6.
-- [ ] S4 — Token cost per paper. Measure a ~12-page and a ~40-page paper end to end. If a large
+- [x] S4 — Token cost per paper. Measure a ~12-page and a ~40-page paper end to end. If a large
       corpus is prohibitive, design the triage pass **into** M3.
-- [ ] S5 — Browser control surface. Confirm a real navigate + read-title round trip. Determine
+- [x] S5 — Browser control surface. Confirm a real navigate + read-title round trip. Determine
       Scholar Labs access state: signed-out vs. waitlisted vs. working. A failed spike cuts
       Scholar Labs to a stretch goal and promotes Semantic Scholar (spec §10).
-- [ ] Write `docs/spikes/FINDINGS.md`.
+- [x] Write `docs/spikes/FINDINGS.md`.
 
 *Acceptance:* findings doc exists and every downstream architectural unknown above is answered
 with evidence, not assumption.
@@ -65,8 +65,10 @@ capability, and land in a valid enabled state.
 - [ ] Citekey resolution: prefer Better BibTeX, else `authorYEARfirstword`, record the mapping.
 - [ ] Dedupe: DOI, then arXiv ID, then normalized title+year.
 - [ ] Per-item checkpointing in `.lit/state.json`; `--force` to redo.
-- [ ] Stage 2 text extraction with `pymupdf4llm`, **preserving page markers** (locators depend
-      on them — do not strip).
+- [ ] Stage 2 text extraction with raw `pymupdf` `page.get_text()`, **preserving page markers**
+      (locators depend on them — do not strip). Heading detection from font size via
+      `get_text("dict")` for section locators. `pymupdf4llm` behind an opt-in `--layout` flag.
+      Amended by ADR-0001 (it is 85x slower for 3% more text).
 - [ ] Scanned-PDF detection (near-zero text layer) then OCR via `ocrmypdf` if available, else flag
       unprocessable.
 - [ ] Per-item error report; one bad item never fails the run.
@@ -132,10 +134,12 @@ contradiction entries all verify.
 - [ ] Tier 1 — arXiv e-print source (original figure files + LaTeX captions/labels).
 - [ ] Tier 2 — PyMuPDF embedded images, caption pairing by nearest `Figure N`/`Table N` block.
 - [ ] Tier 3 — region rasterization for captions with no extractable image.
+      **Confirmed worth building** by S3: rescues vector-figure papers (Xie 0/5, Harkous 1/12).
 - [ ] Tables via PyMuPDF table finder into CSV + markdown; feed into the methods matrix.
 - [ ] `extraction_method` on every figure record.
 - [ ] Papers yielding nothing say `Figure extraction produced no assets for this paper` (P4).
 - [ ] `pdffigures2` as an opt-in extra (JVM), never a default dependency.
+      ADR-0002: not needed to pass acceptance — Tier 2+3 reach 89% paper coverage.
 
 *Acceptance:* at least 1 correctly captioned figure from 80% of gold-set papers with figures;
 misses reported explicitly.
@@ -162,7 +166,9 @@ on a **scratch Zotero library**, never the user's real one.
 ## M8 — Enrichment
 
 - [ ] `enrich_semantic_scholar` first (free API, TLDRs, no scraping) + OpenAlex.
-- [ ] Scholar Labs second, contingent on S5 findings: query-driven (not per-paper), 3–5 questions
+- [ ] Scholar Labs **demoted to stretch goal** by ADR-0003 (`/labs` returns 404 for this user).
+      Semantic Scholar `/paper/search` returned 429 unauthenticated -> needs backoff, caching,
+      and an optional API-key field. If ever revisited: query-driven (not per-paper), 3–5 questions
       per run, visible editable query plan, hard caps in code, human-paced, off by default,
       explicit opt-in with the ToS statement, selectors isolated in one config file.
 - [ ] Papers with no enrichment say so in their notes (P4).
