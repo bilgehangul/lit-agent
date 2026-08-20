@@ -113,16 +113,16 @@ per-row pass/fail. Below 90% means stop, report, do not start M4.
 
 ## M5 — Synthesis
 
-- [ ] `/lit-review` reads all per-paper notes + scope block.
-- [ ] `index.md` — master table: citekey, title, year, venue, type, methods, relevance, one-liner.
-- [ ] `themes.md` — clusters, an argued through-line per cluster, and papers that resist clustering.
-- [ ] `methods-matrix.md` — papers by (method, dataset, metric, headline result, code available).
-- [ ] `gaps.md` — **must distinguish "no one has done this" from "not in this library."**
-- [ ] `contradictions.md` — **every entry needs two verified locators or it does not ship.**
-- [ ] `review-draft.md` — prose in the user's stated voice, every claim carrying
+- [x] `/lit-review` reads all per-paper notes + scope block.
+- [x] `index.md` — master table: citekey, title, year, venue, type, methods, relevance, one-liner.
+- [x] `themes.md` — clusters, an argued through-line per cluster, and papers that resist clustering.
+- [x] `methods-matrix.md` — papers by (method, dataset, metric, headline result, code available).
+- [x] `gaps.md` — **must distinguish "no one has done this" from "not in this library."**
+- [x] `contradictions.md` — **every entry needs two verified locators or it does not ship.**
+- [x] `review-draft.md` — prose in the user's stated voice, every claim carrying
       `[@citekey, p. N]`, `[UNVERIFIED]` where support could not be located.
-- [ ] `refs.bib` — BibTeX for exactly the cited subset, same citekeys.
-- [ ] `--filter` on frontmatter fields (`relevance`, `year`, `paper_type`, `scope_tags`).
+- [x] `refs.bib` — BibTeX for exactly the cited subset, same citekeys.
+- [x] `--filter` on frontmatter fields (`relevance`, `year`, `paper_type`, `scope_tags`).
 
 *Acceptance:* draft related-work section reviewed by the user against the actual papers;
 contradiction entries all verify.
