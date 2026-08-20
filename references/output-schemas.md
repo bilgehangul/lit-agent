@@ -57,12 +57,34 @@ Page markers are the primitive that citation verification depends on (**P7**). T
 emitted on their own line, before each page's text, and **must never be stripped**:
 
 ```
-<!-- page 1 -->
+<!-- page 1 label=1330 -->
 Title of the paper
 ...
-<!-- page 2 -->
+<!-- page 2 label=1331 -->
 ...
 ```
+
+### Two page numbers, because papers have two
+
+A PDF's physical pages run 1..N. The number **printed on the page** is frequently something
+else: Polisis is 19 physical pages printed 530-548, OPP-115 is 11 pages printed 1330-1340,
+Del Alamo et al. is 24 pages printed 2053-2076. Four of the six gold-set papers are numbered
+this way.
+
+A reader citing "p. 1335" is using the printed number, and they are right to -- that is what
+the published paper says and what every other citation of it uses. So:
+
+- `label=` is emitted whenever the printed number differs from the physical index.
+- **Both numbers resolve to the same page** during verification.
+- A locator is `missing` only when it matches *neither* numbering.
+
+Labels come from the PDF's embedded page-label table when it has one, and otherwise from
+detecting a consistent arithmetic run of numbers in the header/footer bands. A single stray
+number is not evidence; a sequence across most of the document is. When the printed numbers
+simply are the physical index, no label is emitted -- the common case stays simple.
+
+Getting this wrong would make a correct journal citation look fabricated, which is the worst
+error this system can make: a false accusation is harder to recover from than a missed check.
 
 Detected headings are emitted as markdown headings so section locators can resolve. Heading
 detection is font-size heuristic, not a parser (ADR-0001) — when a heading cannot be

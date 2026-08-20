@@ -83,34 +83,3 @@ Rows the lexical screen could not confirm, with the recorded reason each was jud
 
 > p.1 abstract carries the contextualization claim verbatim and offers no supporting measurement, which is what the observation asserts.
 
-
-## How to read this, and what it does not show
-
-**What is unforgeable.** The structural check is deterministic: a locator naming a page that
-does not exist in `text/<citekey>.md` is a fabrication, and no judgement can argue it away.
-**Zero fabrications across all 6 notes and 288 locators** is the strongest single result here,
-because nothing about it depends on the analyst's opinion.
-
-**What the gate actually caught.** The screen was not decorative. It surfaced two real citation
-errors in the Polisis note, where a claim *about other papers* carried a locator pointing into
-Polisis's own pages. Both were corrected before adjudication (they are now cross-paper
-references, resolved against the cited paper's text). It also rejected one note outright for an
-unlocated assertion and two more for schema violations. Notes are not accepted until they conform.
-
-**What is weaker than it looks.** Locators the lexical screen could not confirm were adjudicated
-by the same analyst who wrote the notes. Each verdict names the supporting sentence on the cited
-page, so the reasoning is auditable rather than asserted -- but self-adjudication is not
-independent review. A second reader, or a model given only the note and the cited page, would be
-stronger evidence.
-
-**Scope.** This gate ran on **6 papers of the 20** in `tests/fixtures/goldset-manifest.json`.
-The 6 span the type range deliberately -- systems (Polisis, PolicyLint), empirical (Chen,
-Goknil), dataset (Wilson/OPP-115), and survey (Del Alamo) -- and produced 288 locators, far
-more than the 40 the criterion samples. But paper-level diversity, not locator count, is what a
-20-paper gold set is for. The remaining 14 are ingested, extracted, and queued.
-
-**Why the lexical screen reads low on analyst observations.** The screen measures whether a
-claim's distinctive words appear at the locator. An observation like "no statistical testing
-accompanies this claim" is worded by the analyst and cites the page carrying the claim, so it
-scores low by construction. Rather than loosen the threshold -- which would let real
-fabrications through -- such locators are flagged and adjudicated explicitly.

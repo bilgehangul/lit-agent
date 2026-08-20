@@ -23,8 +23,25 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+#: Page markers carry both numbering systems, because papers have two.
+#:
+#: A PDF's physical page index runs 1..N. The number *printed on the page* is often something
+#: else entirely: Del Alamo et al. is 24 physical pages labelled 2053-2076, Kelley et al. is
+#: 10 pages printed 3393-3402. A reader citing "p. 2055" is using the printed number, and
+#: they are not wrong -- that is what the published paper says and what every other citation
+#: of it will use.
+#:
+#: Recording only the physical index would make a correct journal citation look like a
+#: fabricated one, which is the worst error this system can make: a false accusation is
+#: harder to recover from than a missed check.
 PAGE_MARKER = "<!-- page {n} -->"
-PAGE_MARKER_RE = re.compile(r"^<!--\s*page\s+(\d+)\s*-->\s*$", re.M)
+PAGE_MARKER_LABELLED = "<!-- page {n} label={label} -->"
+PAGE_MARKER_RE = re.compile(
+    r"^<!--\s*page\s+(?P<n>\d+)(?:\s+label=(?P<label>\S+))?\s*-->\s*$", re.M)
+
+#: A printed page number detected in a header or footer must agree with its neighbours by
+#: this rule before it is trusted: consecutive pages differ by exactly one.
+PRINTED_NUMBER_RE = re.compile(r"\b(\d{1,5})\b")
 
 #: Below this many characters per page, a PDF is almost certainly scanned images.
 SCANNED_CHARS_PER_PAGE = 60
@@ -61,6 +78,10 @@ class ExtractionResult:
     extractor: str = "pymupdf"
     #: ``(page_number, level, text)`` for every heading detected.
     headings: list[tuple[int, int, str]] = field(default_factory=list)
+    #: physical page index -> printed page label, when the two differ.
+    page_labels: dict[int, str] = field(default_factory=dict)
+    #: How the labels were obtained: "embedded", "detected", or "" when they match the index.
+    label_source: str = ""
     scanned: bool = False
     error: str = ""
 
@@ -102,8 +123,14 @@ def extract(pdf: Path, citekey: str = "", layout: bool = False) -> ExtractionRes
     if result.pages and result.chars / result.pages < SCANNED_CHARS_PER_PAGE:
         result.scanned = True
 
+    label_note = ""
+    if result.page_labels:
+        first = result.page_labels.get(1, "")
+        last = result.page_labels.get(result.pages, "")
+        label_note = (f" printed_pages={first}-{last} "
+                      f"label_source={result.label_source}")
     header = (f"<!-- lit-agent: citekey={citekey or '?'} pages={result.pages} "
-              f"extractor={result.extractor} chars={result.chars} -->")
+              f"extractor={result.extractor} chars={result.chars}{label_note} -->")
     result.markdown = header + "\n\n" + "\n".join(body).strip() + "\n"
     return result
 
@@ -111,10 +138,13 @@ def extract(pdf: Path, citekey: str = "", layout: bool = False) -> ExtractionRes
 def _extract_fast(doc, result: ExtractionResult) -> list[str]:
     """The default path: raw text per page, plus font-size heading detection."""
     body_size = _body_font_size(doc)
+    result.page_labels, result.label_source = page_labels(doc)
     out: list[str] = []
     for index, page in enumerate(doc):
         number = index + 1
-        out.append(PAGE_MARKER.format(n=number))
+        label = result.page_labels.get(number)
+        out.append(PAGE_MARKER_LABELLED.format(n=number, label=label) if label
+                   else PAGE_MARKER.format(n=number))
         headings = _detect_headings(page, body_size) if body_size else {}
         text = page.get_text() or ""
         for line in text.splitlines():
@@ -153,6 +183,84 @@ def _extract_layout(pdf: Path, result: ExtractionResult) -> list[str]:
                 result.headings.append((number, len(m.group(1)), m.group(2).strip()))
         out.append("")
     return out
+
+
+def page_labels(doc) -> tuple[dict[int, str], str]:
+    """Map physical page index (1-based) to the number printed on that page.
+
+    Two sources, in order of trust:
+
+    1. **Embedded labels.** Many publisher PDFs carry a proper page-label table; PyMuPDF
+       exposes it. Del Alamo et al. declares ``firstpagenum: 2053``, so its 24 physical
+       pages are printed 2053-2076.
+    2. **Detected from the page.** When no table exists, look for a number in the header or
+       footer region and accept it only if it forms a consistent run -- consecutive pages
+       differing by exactly one. A single stray number is not evidence; an arithmetic
+       sequence across most of the document is.
+
+    Returns ``({}, "")`` when the printed numbers simply are the physical index, which is
+    the common case and needs no special handling.
+    """
+    labels: dict[int, str] = {}
+
+    try:
+        entries = doc.get_page_labels() or []
+    except Exception:  # noqa: BLE001 - malformed label tables exist in the wild
+        entries = []
+    for entry in entries:
+        start = int(entry.get("startpage", 0))
+        first = int(entry.get("firstpagenum", 1))
+        prefix = entry.get("prefix", "") or ""
+        style = entry.get("style", "D")
+        if style != "D" and not prefix:
+            continue                      # roman/letter styles: leave to detection
+        for offset in range(start, doc.page_count):
+            labels[offset + 1] = f"{prefix}{first + offset - start}"
+    if labels and any(labels.get(n) != str(n) for n in labels):
+        return labels, "embedded"
+
+    detected = _detect_printed_numbers(doc)
+    if detected and any(detected.get(n) != str(n) for n in detected):
+        return detected, "detected"
+    return {}, ""
+
+
+def _detect_printed_numbers(doc, margin: float = 0.12) -> dict[int, str]:
+    """Find printed page numbers in header/footer bands, keeping only a consistent run."""
+    candidates: dict[int, set[int]] = {}
+    for index in range(doc.page_count):
+        page = doc[index]
+        height = page.rect.height
+        found: set[int] = set()
+        try:
+            blocks = page.get_text("blocks")
+        except Exception:  # noqa: BLE001
+            continue
+        for block in blocks:
+            y0, y1, text = block[1], block[3], str(block[4] or "")
+            in_header = y1 < height * margin
+            in_footer = y0 > height * (1 - margin)
+            if not (in_header or in_footer):
+                continue
+            for match in PRINTED_NUMBER_RE.finditer(text):
+                value = int(match.group(1))
+                # A year or a DOI fragment is not a page number.
+                if 1 <= value <= 20000 and not (1900 <= value <= 2100):
+                    found.add(value)
+        candidates[index + 1] = found
+
+    # Keep the offset that makes the most pages agree: label(n) == n + offset.
+    offsets: dict[int, int] = {}
+    for physical, values in candidates.items():
+        for value in values:
+            offsets[value - physical] = offsets.get(value - physical, 0) + 1
+    if not offsets:
+        return {}
+    best_offset, agreeing = max(offsets.items(), key=lambda kv: kv[1])
+    # Demand that most of the document agrees before trusting the offset.
+    if agreeing < max(3, doc.page_count * 0.6) or best_offset == 0:
+        return {}
+    return {n: str(n + best_offset) for n in range(1, doc.page_count + 1)}
 
 
 def _body_font_size(doc, sample_pages: int = 6) -> float | None:
@@ -234,16 +342,27 @@ def _looks_like_a_heading(text: str) -> bool:
 def split_pages(markdown: str) -> dict[int, str]:
     """Parse ``text/<citekey>.md`` back into ``{page_number: text}``.
 
-    This is what the locator checker uses to verify that ``[p. 7]`` points at content that
-    actually supports the claim (P7).
+    **Both numbering systems are keys into the same text.** For a paper whose 24 physical
+    pages are printed 2053-2076, both ``1`` and ``2053`` return page one. A locator written
+    either way therefore resolves, and only a number belonging to neither system is a
+    fabrication (P7).
     """
     pages: dict[int, str] = {}
     matches = list(PAGE_MARKER_RE.finditer(markdown))
     for index, match in enumerate(matches):
         start = match.end()
         end = matches[index + 1].start() if index + 1 < len(matches) else len(markdown)
-        pages[int(match.group(1))] = markdown[start:end].strip()
+        body = markdown[start:end].strip()
+        pages[int(match.group("n"))] = body
+        if (label := match.group("label")) and label.isdigit():
+            pages.setdefault(int(label), body)
     return pages
+
+
+def page_numbering(markdown: str) -> dict[int, str]:
+    """``{physical page: printed label}`` for the pages that carry one."""
+    return {int(m.group("n")): m.group("label")
+            for m in PAGE_MARKER_RE.finditer(markdown) if m.group("label")}
 
 
 def split_sections(markdown: str) -> dict[str, str]:

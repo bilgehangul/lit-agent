@@ -368,3 +368,65 @@ def test_library_item_json_roundtrip(tmp_path: Path) -> None:
     assert restored.notes[0].text == "hi"
     assert restored.annotations[0].page_label == "3"
     assert restored.attachments == [Path("a.pdf")]
+
+
+# --- printed page numbers --------------------------------------------------
+
+
+def _pdf_with_labels(tmp_path: Path, pages: int, first_printed: int):
+    """A PDF whose embedded page-label table starts at ``first_printed``."""
+    pymupdf = pytest.importorskip("pymupdf")
+    doc = pymupdf.open()
+    for n in range(pages):
+        page = doc.new_page()
+        page.insert_textbox(pymupdf.Rect(60, 60, 500, 200),
+                            f"Body text for sheet {n + 1} discussing privacy policies.",
+                            fontsize=11, fontname="helv")
+    doc.set_page_labels([{"startpage": 0, "prefix": "", "style": "D",
+                          "firstpagenum": first_printed}])
+    path = tmp_path / "labelled.pdf"
+    doc.save(str(path))
+    doc.close()
+    return path
+
+
+def test_embedded_page_labels_are_recorded(tmp_path: Path) -> None:
+    """Del Alamo et al. is 24 physical pages printed 2053-2076. Both must resolve."""
+    pdf = _pdf_with_labels(tmp_path, pages=3, first_printed=2053)
+    result = pdf_text.extract(pdf, citekey="x")
+    assert result.label_source == "embedded"
+    assert pdf_text.page_numbering(result.markdown)[1] == "2053"
+
+
+def test_a_journal_page_number_resolves(tmp_path: Path) -> None:
+    """The bug this guards: [p. 2055] on a 3-page PDF is a real citation, not a fabrication."""
+    pdf = _pdf_with_labels(tmp_path, pages=3, first_printed=2053)
+    pages = pdf_text.split_pages(pdf_text.extract(pdf, citekey="x").markdown)
+    assert 3 in pages, "physical page 3 must resolve"
+    assert 2055 in pages, "printed page 2055 must resolve to the same sheet"
+    assert pages[3] == pages[2055]
+
+
+def test_a_number_in_neither_numbering_is_still_missing(tmp_path: Path) -> None:
+    """Widening the check must not make it toothless."""
+    pdf = _pdf_with_labels(tmp_path, pages=3, first_printed=2053)
+    pages = pdf_text.split_pages(pdf_text.extract(pdf, citekey="x").markdown)
+    assert 99 not in pages
+    assert 3000 not in pages
+
+
+def test_pdfs_numbered_from_one_get_no_labels(tmp_path: Path) -> None:
+    """No labels is the common case and must stay the simple case."""
+    result = pdf_text.extract(write_sample_pdf(tmp_path / "plain.pdf"), citekey="x")
+    assert result.page_labels == {}
+    assert result.label_source == ""
+    assert pdf_text.page_numbering(result.markdown) == {}
+
+
+def test_page_marker_regex_reads_both_forms() -> None:
+    plain = pdf_text.PAGE_MARKER.format(n=7)
+    labelled = pdf_text.PAGE_MARKER_LABELLED.format(n=7, label=2059)
+    assert pdf_text.PAGE_MARKER_RE.match(plain).group("n") == "7"
+    assert pdf_text.PAGE_MARKER_RE.match(plain).group("label") is None
+    match = pdf_text.PAGE_MARKER_RE.match(labelled)
+    assert match.group("n") == "7" and match.group("label") == "2059"

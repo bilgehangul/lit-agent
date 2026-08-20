@@ -226,10 +226,17 @@ def check_locator(loc: Locator, pages: dict[int, str],
     if loc.kind == "page":
         number = int(loc.value)
         if number not in pages:
+            # `pages` is keyed by BOTH the physical index and the printed page label, so a
+            # miss here means the number belongs to neither numbering the paper uses.
+            physical = [n for n in pages if n <= len(pages)]
+            hint = ""
+            if pages and max(pages) > len(pages):
+                hint = (" This paper carries printed page numbers as well as physical ones; "
+                        "the locator matches neither.")
             return LocatorCheck(
                 citekey, "page", loc.value, loc.section, loc.claim, False, 0.0, "missing",
                 f"page {number} does not exist in the extracted text "
-                f"(pages 1-{max(pages) if pages else 0})")
+                f"(physical pages 1-{max(physical) if physical else 0})." + hint)
         target = pages[number]
         # A claim often spans a page break, so give the neighbours partial credit.
         neighbours = " ".join(pages.get(n, "") for n in (number - 1, number + 1))
