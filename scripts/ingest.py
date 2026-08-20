@@ -26,6 +26,10 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+from lib.console import setup as _setup_console
+
+_setup_console()
+
 from adapters.base import Adapter, dedupe  # noqa: E402
 from adapters.export_dir import ExportDirAdapter  # noqa: E402
 from adapters.generic_pdf import GenericPdfAdapter  # noqa: E402

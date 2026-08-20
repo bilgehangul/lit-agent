@@ -1,0 +1,165 @@
+{
+  "description": "M3 gold set: 20 papers from the developer's Zotero library spanning the LLM-based privacy policy analysis cluster. PDFs are NOT committed (third-party copyright); this manifest records identity so results are reproducible.",
+  "papers": [
+    {
+      "citekey": "harkousnodatepolisis",
+      "title": "Polisis: Automated Analysis and Presentation of Privacy Policies Using Deep Learning",
+      "year": null,
+      "doi": null,
+      "pdf_sha256": "805b0e28348de8fd75945f35c6be139b7386ea3b9f1ac88df328ec4398637205",
+      "text_chars": 97598
+    },
+    {
+      "citekey": "andownodatepolicylint",
+      "title": "PolicyLint: Investigating Internal Privacy Policy Contradictions on Google Play",
+      "year": null,
+      "doi": null,
+      "pdf_sha256": "95bab2a8e33a6241e88ca98bd5b5b410936dcb241b725ea84aeda7ca4fa12ea6",
+      "text_chars": 107105
+    },
+    {
+      "citekey": "zimmeck2017automated",
+      "title": "Automated Analysis of Privacy Requirements for Mobile Apps",
+      "year": 2017,
+      "doi": "10.14722/ndss.2017.23034",
+      "pdf_sha256": "c6e48cb5f7bd264912d5fb3d02dfdd5dc3b9364ec480b15163f850fd4d21fd67",
+      "text_chars": 93528
+    },
+    {
+      "citekey": "zimmeck2019maps",
+      "title": "MAPS: Scaling Privacy Compliance Analysis to a Million Apps",
+      "year": 2019,
+      "doi": "10.2478/popets-2019-0037",
+      "pdf_sha256": "825b45f8aab27874bcbe1c35d6cc329fc14863ed31ba6e7d1283ecd4a8ec558d",
+      "text_chars": 91465
+    },
+    {
+      "citekey": "chen2025clear",
+      "title": "CLEAR: Towards Contextual LLM-Empowered Privacy Policy Analysis and Risk Generation for Large Language Model Applications",
+      "year": 2025,
+      "doi": "10.1145/3708359.3712156",
+      "pdf_sha256": "07f2f0b51da7a1670dc81d936b610d755133a8426012fba6f21f41eeaea4c6c4",
+      "text_chars": 113330
+    },
+    {
+      "citekey": "chen2025llms",
+      "title": "Using LLMs for Automated Privacy Policy Analysis: Prompt Engineering, Fine-Tuning and Explainability",
+      "year": 2025,
+      "doi": "10.48550/arxiv.2503.16516",
+      "pdf_sha256": "256f5980b1b15b7853647778fae1099bbc28b58bc03f0f8489d4e4a566cbd1c3",
+      "text_chars": 50995
+    },
+    {
+      "citekey": "fan2024goldcoin",
+      "title": "GoldCoin: Grounding Large Language Models in Privacy Laws via Contextual Integrity Theory",
+      "year": 2024,
+      "doi": "10.18653/v1/2024.emnlp-main.195",
+      "pdf_sha256": "245c20c7e8e545a7c47c4df77659cd2ff73e12c47badc45f384763aeb660738c",
+      "text_chars": 98634
+    },
+    {
+      "citekey": "goknil2024privacy",
+      "title": "Privacy Policy Analysis through Prompt Engineering for LLMs",
+      "year": 2024,
+      "doi": "10.48550/arxiv.2409.14879",
+      "pdf_sha256": "05577cf1e448f1168fb55b6852575589355e1222b2232cc28365698be7798ad5",
+      "text_chars": 106876
+    },
+    {
+      "citekey": "mori2025evaluating",
+      "title": "Evaluating LLMs Towards Automated Assessment of Privacy Policy Understandability",
+      "year": 2025,
+      "doi": "10.14722/usec.2025.23009",
+      "pdf_sha256": "d0d9810716d416386afe25ae65f5f3f17027c5466d6aadf577356b60fe748a65",
+      "text_chars": 102030
+    },
+    {
+      "citekey": "rodriguez2024large",
+      "title": "Large language models: a new approach for privacy policy analysis at scale",
+      "year": 2024,
+      "doi": "10.1007/s00607-024-01331-9",
+      "pdf_sha256": "0ccb88d5b5cbc6b6d57c5238380ae6d0196c27d00e218717a952e7fb9cffbafd",
+      "text_chars": 70499
+    },
+    {
+      "citekey": "xienodateevaluating",
+      "title": "Evaluating Privacy Policies under Modern Privacy Laws At Scale: An LLM-Based Automated Approach",
+      "year": null,
+      "doi": null,
+      "pdf_sha256": "1af6d752087a45fde654dd906158bc59fafe5a58b33e80a20481de1d1e9a0bb1",
+      "text_chars": 101510
+    },
+    {
+      "citekey": "amos2021privacy",
+      "title": "Privacy Policies over Time: Curation and Analysis of a Million-Document Dataset",
+      "year": 2021,
+      "doi": "10.1145/3442381.3450048",
+      "pdf_sha256": "5dd022a71ae519a3b32ec7cf6b46bdb66c79908467389f995ee67e2671bce03e",
+      "text_chars": 79291
+    },
+    {
+      "citekey": "wilson2016creation",
+      "title": "The Creation and Analysis of a Website Privacy Policy Corpus",
+      "year": 2016,
+      "doi": "10.18653/v1/p16-1126",
+      "pdf_sha256": "18e4e3410169571abdc8b86efa8250111e13556e801fe51adcee4ea1f190f963",
+      "text_chars": 44988
+    },
+    {
+      "citekey": "delalamo2022systematic",
+      "title": "A systematic mapping study on automated analysis of privacy policies",
+      "year": 2022,
+      "doi": "10.1007/s00607-022-01076-3",
+      "pdf_sha256": "7bca22b59e657c6b2bd39693ef2336d9cae9f4a7709f9d6bdd6d7d0313a317a6",
+      "text_chars": 66675
+    },
+    {
+      "citekey": "ravichander2019question",
+      "title": "Question Answering for Privacy Policies: Combining Computational and Legal Perspectives",
+      "year": 2019,
+      "doi": "10.18653/v1/d19-1500",
+      "pdf_sha256": "09b848e03b66d864d009676c1d98d39e75744cf6e4532d131a729cc18bdef928",
+      "text_chars": 47482
+    },
+    {
+      "citekey": "hosseininodatelexical",
+      "title": "Lexical Similarity of Information Type Hypernyms, Meronyms, and Synonyms in Privacy Policies",
+      "year": null,
+      "doi": null,
+      "pdf_sha256": "413f3805be9254c594c9aa017dd2523b9ee29fc482c927778019f1b7fa948542",
+      "text_chars": 41999
+    },
+    {
+      "citekey": "liu2014step",
+      "title": "A Step Towards Usable Privacy Policy: Automatic Alignment of Privacy Statements",
+      "year": 2014,
+      "doi": null,
+      "pdf_sha256": "90c9423208f5fb30f864256932e2df761b91737427e8afd63d6c52fe2e25a8ae",
+      "text_chars": 39372
+    },
+    {
+      "citekey": "mousavinejad2020establishing",
+      "title": "Establishing a Strong Baseline for Privacy Policy Classification",
+      "year": 2020,
+      "doi": "10.1007/978-3-030-58201-2_25",
+      "pdf_sha256": "6aecf8510dc5b2d2b1e66baeb6f29d5fe2de35b80a2aec5d80e80b91801c5e00",
+      "text_chars": 41972
+    },
+    {
+      "citekey": "morales2024large",
+      "title": "A Large Language Model Approach to Code and Privacy Policy Alignment",
+      "year": 2024,
+      "doi": "10.1109/saner60148.2024.00016",
+      "pdf_sha256": "a7ecc252fdbf93a9d60fefef945ac740fe43ca8a76ec5a95ed45e251b67f95d4",
+      "text_chars": 73389
+    },
+    {
+      "citekey": "schaub2018design",
+      "title": "A Design Space for Effective Privacy Notices*",
+      "year": 2018,
+      "doi": "10.1017/9781316831960.021",
+      "pdf_sha256": "80f3bb73f9351dd44adec4348d5aea5a99acd59e09b9c25f85fdd714484a2c8c",
+      "text_chars": 104319
+    }
+  ]
+}

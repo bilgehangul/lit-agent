@@ -80,19 +80,19 @@ correctly and produces identical output.
 
 ## M3 — Analyze — **HARD GATE**
 
-- [ ] Per-paper note writer: full YAML frontmatter + the 12 body sections in fixed order (spec §6).
-- [ ] Scope conditioning: every prompt injects the scope block; every note stamped with the
+- [x] Per-paper note writer: full YAML frontmatter + the 12 body sections in fixed order (spec §6).
+- [x] Scope conditioning: every prompt injects the scope block; every note stamped with the
       scope version that produced it.
-- [ ] Undeterminable fields written as `Not determinable from the text` — never guessed, never
+- [x] Undeterminable fields written as `Not determinable from the text` — never guessed, never
       silently omitted (P4).
-- [ ] Map-reduce for long papers (per-section pass, then synthesis) — never truncation.
-- [ ] Parallel batches with a concurrency cap.
-- [ ] Locator self-check: resolve every `[p. N]` / `[§x.y]` against extracted text, then an
+- [x] Map-reduce for long papers (per-section pass, then synthesis) — never truncation.
+- [x] Parallel batches with a concurrency cap.
+- [x] Locator self-check: resolve every `[p. N]` / `[§x.y]` against extracted text, then an
       independent verifier judges whether the cited span supports the claim. Downgrade
       `confidence` and mark `[UNVERIFIED]` where it does not.
-- [ ] Triage pass (cheap relevance screen, full analysis on high-relevance only) if S4 says cost
+- [x] Triage pass (cheap relevance screen, full analysis on high-relevance only) if S4 says cost
       demands it.
-- [ ] User annotations preserved verbatim in section 9; analyzer commentary in a marked sub-block.
+- [x] User annotations preserved verbatim in section 9; analyzer commentary in a marked sub-block.
 
 *Acceptance (**HARD GATE**):* on a 20-paper gold set, spot-check 40 locators; **at least 90% resolve to
 supporting text and zero fabricated citations.** Report at `docs/spikes/m3-locator-check.md` with

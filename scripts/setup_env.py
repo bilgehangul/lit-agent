@@ -23,6 +23,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+from lib.console import setup as _setup_console
+
+_setup_console()
+
 from lib.paths import VENV_DIR, plugin_root, venv_python  # noqa: E402
 
 MIN_PYTHON = (3, 10)

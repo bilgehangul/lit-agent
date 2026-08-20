@@ -31,6 +31,10 @@ from typing import Any, Callable
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+from lib.console import setup as _setup_console
+
+_setup_console()
+
 from lib import paths  # noqa: E402
 from lib.capabilities import (  # noqa: E402
     BY_ID,
