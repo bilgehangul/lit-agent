@@ -1,0 +1,32 @@
+# Working corpora (P5: markdown is source of truth, but corpora are user data)
+.lit/
+*.lit-cache/
+
+# Never commit third-party PDFs from a user's library (copyright)
+tests/fixtures/goldset/
+tests/fixtures/**/*.pdf
+**/figures/**/*.png
+**/figures/**/*.jpg
+
+# Python
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Secrets - Zotero API keys never live in the repo (spec 12)
+.env
+*.key
+secrets.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+
+# Scratch
+scratch/
+tmp/

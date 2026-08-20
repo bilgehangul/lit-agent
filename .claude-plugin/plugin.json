@@ -1,0 +1,8 @@
+{
+  "name": "lit-agent",
+  "version": "0.1.0",
+  "description": "Literature review and paper-writing assistant over a Zotero or PDF library",
+  "author": { "name": "Bilgehan Gul" },
+  "license": "MIT",
+  "keywords": ["research", "zotero", "literature-review", "citations", "pdf"]
+}
